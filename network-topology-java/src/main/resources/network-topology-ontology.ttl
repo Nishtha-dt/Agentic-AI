@@ -1,0 +1,425 @@
+@prefix : <http://example.org/network-topology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/2002/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+# ================================================================
+# NETWORK TOPOLOGY ONTOLOGY - TURTLE FORMAT
+# ================================================================
+
+<http://example.org/network-topology> a owl:Ontology ;
+    dc:title "Network Topology Ontology" ;
+    dc:description "An OWL/RDFS ontology for modeling network topology including devices, interfaces, links, sites, zones, and operational attributes" ;
+    dc:creator "AI Assistant" ;
+    dc:date "2025-08-07" ;
+    owl:versionInfo "1.0" .
+
+# ================================================================
+# TOP-LEVEL CLASSES
+# ================================================================
+
+:NetworkEntity a owl:Class ;
+    rdfs:label "Network Entity" ;
+    rdfs:comment "Abstract class representing any entity in a network topology" .
+
+# ================================================================
+# DEVICE CLASSES
+# ================================================================
+
+:NetworkDevice a owl:Class ;
+    rdfs:label "Network Device" ;
+    rdfs:comment "A physical or virtual device in the network" ;
+    rdfs:subClassOf :NetworkEntity .
+
+:Router a owl:Class ;
+    rdfs:label "Router" ;
+    rdfs:comment "A network device that forwards data packets between computer networks" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:Switch a owl:Class ;
+    rdfs:label "Switch" ;
+    rdfs:comment "A network device that connects devices within a single network segment" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:Firewall a owl:Class ;
+    rdfs:label "Firewall" ;
+    rdfs:comment "A network security device that monitors and controls network traffic" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:AccessPoint a owl:Class ;
+    rdfs:label "Access Point" ;
+    rdfs:comment "A wireless network device that allows wireless devices to connect to a wired network" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:LoadBalancer a owl:Class ;
+    rdfs:label "Load Balancer" ;
+    rdfs:comment "A device that distributes network traffic across multiple servers" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:Gateway a owl:Class ;
+    rdfs:label "Gateway" ;
+    rdfs:comment "A device that connects networks using different protocols" ;
+    rdfs:subClassOf :NetworkDevice .
+
+# ================================================================
+# INTERFACE CLASSES
+# ================================================================
+
+:NetworkInterface a owl:Class ;
+    rdfs:label "Network Interface" ;
+    rdfs:comment "A connection point between a device and a network" ;
+    rdfs:subClassOf :NetworkEntity .
+
+:EthernetInterface a owl:Class ;
+    rdfs:label "Ethernet Interface" ;
+    rdfs:comment "A wired network interface using Ethernet protocol" ;
+    rdfs:subClassOf :NetworkInterface .
+
+:WirelessInterface a owl:Class ;
+    rdfs:label "Wireless Interface" ;
+    rdfs:comment "A wireless network interface" ;
+    rdfs:subClassOf :NetworkInterface .
+
+:SerialInterface a owl:Class ;
+    rdfs:label "Serial Interface" ;
+    rdfs:comment "A serial communication interface" ;
+    rdfs:subClassOf :NetworkInterface .
+
+:VirtualInterface a owl:Class ;
+    rdfs:label "Virtual Interface" ;
+    rdfs:comment "A software-defined network interface" ;
+    rdfs:subClassOf :NetworkInterface .
+
+# ================================================================
+# LINK CLASSES
+# ================================================================
+
+:NetworkLink a owl:Class ;
+    rdfs:label "Network Link" ;
+    rdfs:comment "A connection between two network interfaces" ;
+    rdfs:subClassOf :NetworkEntity .
+
+:PhysicalLink a owl:Class ;
+    rdfs:label "Physical Link" ;
+    rdfs:comment "A physical connection between network devices" ;
+    rdfs:subClassOf :NetworkLink .
+
+:VirtualLink a owl:Class ;
+    rdfs:label "Virtual Link" ;
+    rdfs:comment "A logical connection between network devices" ;
+    rdfs:subClassOf :NetworkLink .
+
+:WirelessLink a owl:Class ;
+    rdfs:label "Wireless Link" ;
+    rdfs:comment "A wireless connection between network devices" ;
+    rdfs:subClassOf :NetworkLink .
+
+# ================================================================
+# LOCATION CLASSES
+# ================================================================
+
+:Site a owl:Class ;
+    rdfs:label "Site" ;
+    rdfs:comment "A physical location containing network infrastructure" ;
+    rdfs:subClassOf :NetworkEntity .
+
+:DataCenter a owl:Class ;
+    rdfs:label "Data Center" ;
+    rdfs:comment "A facility housing computer systems and network equipment" ;
+    rdfs:subClassOf :Site .
+
+:BranchOffice a owl:Class ;
+    rdfs:label "Branch Office" ;
+    rdfs:comment "A remote office location with network infrastructure" ;
+    rdfs:subClassOf :Site .
+
+:Zone a owl:Class ;
+    rdfs:label "Zone" ;
+    rdfs:comment "A logical grouping of network resources with similar security or functional requirements" ;
+    rdfs:subClassOf :NetworkEntity .
+
+:SecurityZone a owl:Class ;
+    rdfs:label "Security Zone" ;
+    rdfs:comment "A zone defined by security policies and access controls" ;
+    rdfs:subClassOf :Zone .
+
+:DMZ a owl:Class ;
+    rdfs:label "DMZ" ;
+    rdfs:comment "Demilitarized Zone - a physical or logical subnetwork that contains external-facing services" ;
+    rdfs:subClassOf :SecurityZone .
+
+:VLAN a owl:Class ;
+    rdfs:label "VLAN" ;
+    rdfs:comment "Virtual Local Area Network - a logical grouping of devices" ;
+    rdfs:subClassOf :Zone .
+
+# ================================================================
+# OPERATIONAL STATUS INDIVIDUALS
+# ================================================================
+
+:OperationalStatus a owl:Class ;
+    rdfs:label "Operational Status" ;
+    rdfs:comment "The operational state of a network entity" .
+
+:Active a :OperationalStatus ;
+    rdfs:label "Active" ;
+    rdfs:comment "The entity is operational and functioning normally" .
+
+:Inactive a :OperationalStatus ;
+    rdfs:label "Inactive" ;
+    rdfs:comment "The entity is not operational" .
+
+:Maintenance a :OperationalStatus ;
+    rdfs:label "Maintenance" ;
+    rdfs:comment "The entity is under maintenance" .
+
+:Failed a :OperationalStatus ;
+    rdfs:label "Failed" ;
+    rdfs:comment "The entity has failed and is not operational" .
+
+# ================================================================
+# OBJECT PROPERTIES
+# ================================================================
+
+# Device Relationships
+:hasInterface a owl:ObjectProperty ;
+    rdfs:label "has interface" ;
+    rdfs:comment "Relates a device to its network interfaces" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range :NetworkInterface .
+
+:interfaceOf a owl:ObjectProperty ;
+    rdfs:label "interface of" ;
+    rdfs:comment "Relates an interface to its parent device" ;
+    rdfs:domain :NetworkInterface ;
+    rdfs:range :NetworkDevice ;
+    owl:inverseOf :hasInterface .
+
+# Link Relationships
+:connectsInterface a owl:ObjectProperty ;
+    rdfs:label "connects interface" ;
+    rdfs:comment "Relates a link to the interfaces it connects" ;
+    rdfs:domain :NetworkLink ;
+    rdfs:range :NetworkInterface .
+
+:connectedVia a owl:ObjectProperty ;
+    rdfs:label "connected via" ;
+    rdfs:comment "Relates an interface to the link it uses" ;
+    rdfs:domain :NetworkInterface ;
+    rdfs:range :NetworkLink ;
+    owl:inverseOf :connectsInterface .
+
+:connectedTo a owl:ObjectProperty, owl:SymmetricProperty ;
+    rdfs:label "connected to" ;
+    rdfs:comment "Direct connection between two devices" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range :NetworkDevice .
+
+# Location Relationships
+:locatedAt a owl:ObjectProperty ;
+    rdfs:label "located at" ;
+    rdfs:comment "Relates a network entity to its physical location" ;
+    rdfs:domain :NetworkEntity ;
+    rdfs:range :Site .
+
+:contains a owl:ObjectProperty ;
+    rdfs:label "contains" ;
+    rdfs:comment "Relates a site to the network entities it contains" ;
+    rdfs:domain :Site ;
+    rdfs:range :NetworkEntity ;
+    owl:inverseOf :locatedAt .
+
+# Zone Relationships
+:belongsToZone a owl:ObjectProperty ;
+    rdfs:label "belongs to zone" ;
+    rdfs:comment "Relates a network entity to its zone" ;
+    rdfs:domain :NetworkEntity ;
+    rdfs:range :Zone .
+
+:includesEntity a owl:ObjectProperty ;
+    rdfs:label "includes entity" ;
+    rdfs:comment "Relates a zone to the entities it includes" ;
+    rdfs:domain :Zone ;
+    rdfs:range :NetworkEntity ;
+    owl:inverseOf :belongsToZone .
+
+# Status Relationship
+:hasStatus a owl:ObjectProperty ;
+    rdfs:label "has status" ;
+    rdfs:comment "Relates an entity to its operational status" ;
+    rdfs:domain :NetworkEntity ;
+    rdfs:range :OperationalStatus .
+
+# ================================================================
+# DATATYPE PROPERTIES
+# ================================================================
+
+# Identification Properties
+:deviceId a owl:DatatypeProperty ;
+    rdfs:label "device ID" ;
+    rdfs:comment "Unique identifier for a network device" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:string .
+
+:hostname a owl:DatatypeProperty ;
+    rdfs:label "hostname" ;
+    rdfs:comment "Network hostname of the device" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:string .
+
+:ipAddress a owl:DatatypeProperty ;
+    rdfs:label "IP address" ;
+    rdfs:comment "IP address assigned to an interface" ;
+    rdfs:domain :NetworkInterface ;
+    rdfs:range xsd:string .
+
+:macAddress a owl:DatatypeProperty ;
+    rdfs:label "MAC address" ;
+    rdfs:comment "Media Access Control address of an interface" ;
+    rdfs:domain :NetworkInterface ;
+    rdfs:range xsd:string .
+
+# Hardware Properties
+:manufacturer a owl:DatatypeProperty ;
+    rdfs:label "manufacturer" ;
+    rdfs:comment "Manufacturer of the network device" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:string .
+
+:model a owl:DatatypeProperty ;
+    rdfs:label "model" ;
+    rdfs:comment "Model number or name of the device" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:string .
+
+:serialNumber a owl:DatatypeProperty ;
+    rdfs:label "serial number" ;
+    rdfs:comment "Serial number of the device" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:string .
+
+# Software Properties
+:firmwareVersion a owl:DatatypeProperty ;
+    rdfs:label "firmware version" ;
+    rdfs:comment "Version of the firmware running on the device" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:string .
+
+:osVersion a owl:DatatypeProperty ;
+    rdfs:label "OS version" ;
+    rdfs:comment "Operating system version running on the device" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:string .
+
+# Operational Properties
+:uptime a owl:DatatypeProperty ;
+    rdfs:label "uptime" ;
+    rdfs:comment "Time since the device was last restarted (in seconds)" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:long .
+
+:lastSeen a owl:DatatypeProperty ;
+    rdfs:label "last seen" ;
+    rdfs:comment "Timestamp when the device was last detected" ;
+    rdfs:domain :NetworkDevice ;
+    rdfs:range xsd:dateTime .
+
+# Interface Properties
+:interfaceName a owl:DatatypeProperty ;
+    rdfs:label "interface name" ;
+    rdfs:comment "Name of the network interface" ;
+    rdfs:domain :NetworkInterface ;
+    rdfs:range xsd:string .
+
+:speed a owl:DatatypeProperty ;
+    rdfs:label "speed" ;
+    rdfs:comment "Speed of the interface in Mbps" ;
+    rdfs:domain :NetworkInterface ;
+    rdfs:range xsd:int .
+
+:mtu a owl:DatatypeProperty ;
+    rdfs:label "MTU" ;
+    rdfs:comment "Maximum Transmission Unit size in bytes" ;
+    rdfs:domain :NetworkInterface ;
+    rdfs:range xsd:int .
+
+# Link Properties
+:bandwidth a owl:DatatypeProperty ;
+    rdfs:label "bandwidth" ;
+    rdfs:comment "Bandwidth capacity of the link in Mbps" ;
+    rdfs:domain :NetworkLink ;
+    rdfs:range xsd:int .
+
+:latency a owl:DatatypeProperty ;
+    rdfs:label "latency" ;
+    rdfs:comment "Network latency in milliseconds" ;
+    rdfs:domain :NetworkLink ;
+    rdfs:range xsd:float .
+
+# Location Properties
+:siteName a owl:DatatypeProperty ;
+    rdfs:label "site name" ;
+    rdfs:comment "Name of the site" ;
+    rdfs:domain :Site ;
+    rdfs:range xsd:string .
+
+:address a owl:DatatypeProperty ;
+    rdfs:label "address" ;
+    rdfs:comment "Physical address of the site" ;
+    rdfs:domain :Site ;
+    rdfs:range xsd:string .
+
+:coordinates a owl:DatatypeProperty ;
+    rdfs:label "coordinates" ;
+    rdfs:comment "GPS coordinates of the site" ;
+    rdfs:domain :Site ;
+    rdfs:range xsd:string .
+
+# Zone Properties
+:zoneName a owl:DatatypeProperty ;
+    rdfs:label "zone name" ;
+    rdfs:comment "Name of the zone" ;
+    rdfs:domain :Zone ;
+    rdfs:range xsd:string .
+
+:vlanId a owl:DatatypeProperty ;
+    rdfs:label "VLAN ID" ;
+    rdfs:comment "VLAN identifier" ;
+    rdfs:domain :VLAN ;
+    rdfs:range xsd:int .
+
+:securityLevel a owl:DatatypeProperty ;
+    rdfs:label "security level" ;
+    rdfs:comment "Security classification level" ;
+    rdfs:domain :SecurityZone ;
+    rdfs:range xsd:string .
+
+# ================================================================
+# RESTRICTIONS AND AXIOMS
+# ================================================================
+
+:NetworkDevice rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :hasInterface ;
+    owl:minCardinality 1
+] .
+
+:NetworkLink rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :connectsInterface ;
+    owl:cardinality 2
+] .
+
+:NetworkInterface rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :interfaceOf ;
+    owl:cardinality 1
+] .
+
+:NetworkEntity rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty :hasStatus ;
+    owl:cardinality 1
+] .

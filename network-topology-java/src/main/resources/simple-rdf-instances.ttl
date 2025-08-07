@@ -1,0 +1,52 @@
+@prefix : <http://example.org/network-topology#> .
+@prefix nt: <http://example.org/network-topology/instances#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ================================================================
+# SIMPLE RDF INSTANCES - Based on User Request
+# ================================================================
+
+# Site A
+nt:SiteA a :Site ;
+    :siteName "Site A" ;
+    :hasStatus :Active .
+
+# Router 1
+nt:Router1 a :Router ;
+    :deviceId "RTR-001" ;
+    :hostname "router1.example.com" ;
+    :locatedAt nt:SiteA ;        # Using correct property name from ontology
+    :firmwareVersion "1.2.0" ;   # Using correct property name from ontology
+    :hasStatus :Active .
+
+# Router 2  
+nt:Router2 a :Router ;
+    :deviceId "RTR-002" ;
+    :hostname "router2.example.com" ;
+    :firmwareVersion "1.2.0" ;
+    :hasStatus :Active .
+
+# Router Interfaces (required by ontology constraints)
+nt:Router1_Interface1 a :EthernetInterface ;
+    :interfaceName "GigabitEthernet0/0/0" ;
+    :ipAddress "10.1.1.1" ;
+    :interfaceOf nt:Router1 ;
+    :hasStatus :Active .
+
+nt:Router2_Interface1 a :EthernetInterface ;
+    :interfaceName "GigabitEthernet0/0/0" ;
+    :ipAddress "10.1.1.2" ;
+    :interfaceOf nt:Router2 ;
+    :hasStatus :Active .
+
+# Link 1
+nt:Link1 a :NetworkLink ;
+    :connectsInterface nt:Router1_Interface1, nt:Router2_Interface1 ;  # Using correct property from ontology
+    :hasStatus :Active .  # Using correct status format from ontology
+
+# Additional required relationships per ontology
+nt:Router1 :hasInterface nt:Router1_Interface1 .
+nt:Router2 :hasInterface nt:Router2_Interface1 .
+nt:Router1 :connectedTo nt:Router2 .
+nt:SiteA :contains nt:Router1 .
