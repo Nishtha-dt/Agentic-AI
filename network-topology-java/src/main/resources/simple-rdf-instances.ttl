@@ -4,49 +4,322 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 # ================================================================
-# SIMPLE RDF INSTANCES - Based on User Request
+#  RDF INSTANCES - 5G NOC View (Routers, gNodeB, Core, Edge, Links)
 # ================================================================
 
-# Site A
+# ---- Sites ----
 nt:SiteA a :Site ;
-    :siteName "Site A" ;
+    :siteName "Site A (Access / Aggregation)" ;
     :hasStatus :Active .
 
-# Router 1
+nt:CoreSite a :Site ;
+    :siteName "Core Site (Data Center / CNF)" ;
+    :hasStatus :Active .
+
+nt:EdgeSite a :Site ;
+    :siteName "Edge Site (MEC / Edge Compute)" ;
+    :hasStatus :Active .
+
+# ---- Routers / Switches / Firewall / AP ----
 nt:Router1 a :Router ;
     :deviceId "RTR-001" ;
     :hostname "router1.example.com" ;
-    :locatedAt nt:SiteA ;        # Using correct property name from ontology
-    :firmwareVersion "1.2.0" ;   # Using correct property name from ontology
-    :hasStatus :Active .
-
-# Router 2  
-nt:Router2 a :Router ;
-    :deviceId "RTR-002" ;
-    :hostname "router2.example.com" ;
+    :locatedAt nt:SiteA ;
     :firmwareVersion "1.2.0" ;
     :hasStatus :Active .
 
-# Router Interfaces (required by ontology constraints)
+nt:Router2 a :Router ;
+    :deviceId "RTR-002" ;
+    :hostname "router2.example.com" ;
+    :locatedAt nt:SiteA ;
+    :firmwareVersion "1.2.0" ;
+    :hasStatus :Active .
+
+nt:Switch1 a :Switch ;
+    :deviceId "SW-001" ;
+    :hostname "switch1.example.com" ;
+    :locatedAt nt:SiteA ;
+    :hasPortCount "24" ;
+    :hasStatus :Active .
+
+nt:Firewall1 a :Firewall ;
+    :deviceId "FW-001" ;
+    :hostname "firewall1.example.com" ;
+    :locatedAt nt:SiteA ;
+    :hasStatus :Active .
+
+nt:AccessPoint1 a :AccessPoint ;
+    :deviceId "AP-001" ;
+    :hostname "ap1.example.com" ;
+    :locatedAt nt:SiteA ;
+    :hasStatus :Active .
+
+# ---- Servers ----
+nt:Server1 a :Server ;
+    :deviceId "SRV-001" ;
+    :hostname "server1.example.com" ;
+    :locatedAt nt:SiteA ;
+    :hasStatus :Active .
+
+nt:Server2 a :Server ;
+    :deviceId "SRV-002" ;
+    :hostname "server2.example.com" ;
+    :locatedAt nt:SiteA ;
+    :hasStatus :Active .
+
+# ---- 5G Elements: gNodeB (Radio), Core Network Functions, Edge Compute ----
+nt:gNodeB1 a :gNodeB ;
+    :deviceId "gNB-001" ;
+    :hostname "gnb1.example.com" ;
+    :locatedAt nt:SiteA ;
+    :firmwareVersion "3.0.0" ;
+    :hasStatus :Active .
+
+nt:AMF1 a :CoreNetworkFunction ;
+    :deviceId "AMF-001" ;
+    :hostname "amf1.core.example.com" ;
+    :locatedAt nt:CoreSite ;
+    :hasStatus :Active .
+
+nt:SMF1 a :CoreNetworkFunction ;
+    :deviceId "SMF-001" ;
+    :hostname "smf1.core.example.com" ;
+    :locatedAt nt:CoreSite ;
+    :hasStatus :Active .
+
+nt:UPF1 a :CoreNetworkFunction ;
+    :deviceId "UPF-001" ;
+    :hostname "upf1.core.example.com" ;
+    :locatedAt nt:CoreSite ;
+    :hasStatus :Active .
+
+nt:EdgeServer1 a :EdgeServer ;
+    :deviceId "EDGE-001" ;
+    :hostname "edge1.mec.example.com" ;
+    :locatedAt nt:EdgeSite ;
+    :hasStatus :Active .
+
+nt:EdgeServer2 a :EdgeServer ;
+    :deviceId "EDGE-002" ;
+    :hostname "edge2.mec.example.com" ;
+    :locatedAt nt:EdgeSite ;
+    :hasStatus :Active .
+
+# ---- Interfaces ----
+# Router1 Interfaces
 nt:Router1_Interface1 a :EthernetInterface ;
-    :interfaceName "GigabitEthernet0/0/0" ;
+    :interfaceName "GigabitEthernet0/0/1" ;
     :ipAddress "10.1.1.1" ;
     :interfaceOf nt:Router1 ;
     :hasStatus :Active .
 
+nt:Router1_Interface2 a :EthernetInterface ;
+    :interfaceName "GigabitEthernet0/0/2" ;
+    :ipAddress "10.1.1.10" ;
+    :interfaceOf nt:Router1 ;
+    :hasStatus :Active .
+
+# Router2 Interface
 nt:Router2_Interface1 a :EthernetInterface ;
     :interfaceName "GigabitEthernet0/0/0" ;
-    :ipAddress "10.1.1.2" ;
+    :ipAddress "10.1.1.3" ;
     :interfaceOf nt:Router2 ;
     :hasStatus :Active .
 
-# Link 1
-nt:Link1 a :NetworkLink ;
-    :connectsInterface nt:Router1_Interface1, nt:Router2_Interface1 ;  # Using correct property from ontology
-    :hasStatus :Active .  # Using correct status format from ontology
+# Switch1 Interfaces
+nt:Switch1_Interface1 a :EthernetInterface ;
+    :interfaceName "GigabitEthernet1/0/1" ;
+    :ipAddress "10.1.1.2" ;
+    :interfaceOf nt:Switch1 ;
+    :hasStatus :Active .
 
-# Additional required relationships per ontology
-nt:Router1 :hasInterface nt:Router1_Interface1 .
-nt:Router2 :hasInterface nt:Router2_Interface1 .
-nt:Router1 :connectedTo nt:Router2 .
-nt:SiteA :contains nt:Router1 .
+nt:Switch1_Interface2 a :EthernetInterface ;
+    :interfaceName "GigabitEthernet1/0/2" ;
+    :ipAddress "10.1.1.20" ;
+    :interfaceOf nt:Switch1 ;
+    :hasStatus :Active .
+
+# Server Interfaces
+nt:Server1_Interface1 a :EthernetInterface ;
+    :interfaceName "eth0" ;
+    :ipAddress "10.1.1.100" ;
+    :interfaceOf nt:Server1 ;
+    :hasStatus :Active .
+
+nt:Server2_Interface1 a :EthernetInterface ;
+    :interfaceName "eth0" ;
+    :ipAddress "10.1.1.101" ;
+    :interfaceOf nt:Server2 ;
+    :hasStatus :Active .
+
+# Firewall / AP Interfaces
+nt:Firewall1_Interface1 a :EthernetInterface ;
+    :interfaceName "eth0" ;
+    :ipAddress "10.1.1.254" ;
+    :interfaceOf nt:Firewall1 ;
+    :hasStatus :Active .
+
+nt:AccessPoint1_Interface1 a :EthernetInterface ;
+    :interfaceName "wlan0" ;
+    :ipAddress "10.1.1.200" ;
+    :interfaceOf nt:AccessPoint1 ;
+    :hasStatus :Active .
+
+# Router1 additional interface to core/transport
+nt:Router1_Interface3 a :EthernetInterface ;
+    :interfaceName "TenGigE0/1/0" ;
+    :ipAddress "10.1.2.1" ;
+    :interfaceOf nt:Router1 ;
+    :hasStatus :Active .
+
+# Router2 transport interface (towards gNodeB / transport)
+nt:Router2_Interface2 a :EthernetInterface ;
+    :interfaceName "TenGigE0/1/0" ;
+    :ipAddress "10.1.2.2" ;
+    :interfaceOf nt:Router2 ;
+    :hasStatus :Active .
+
+# gNodeB interface
+nt:gNodeB1_IF1 a :EthernetInterface ;
+    :interfaceName "n3-eth0" ;
+    :ipAddress "10.1.2.10" ;
+    :interfaceOf nt:gNodeB1 ;
+    :hasStatus :Active .
+
+# Core network interfaces (CoreSite)
+nt:AMF1_IF1 a :EthernetInterface ;
+    :interfaceName "core-eth0" ;
+    :ipAddress "172.16.0.11" ;
+    :interfaceOf nt:AMF1 ;
+    :hasStatus :Active .
+
+nt:SMF1_IF1 a :EthernetInterface ;
+    :interfaceName "core-eth0" ;
+    :ipAddress "172.16.0.12" ;
+    :interfaceOf nt:SMF1 ;
+    :hasStatus :Active .
+
+nt:UPF1_IF1 a :EthernetInterface ;
+    :interfaceName "core-eth0" ;
+    :ipAddress "172.16.0.13" ;
+    :interfaceOf nt:UPF1 ;
+    :hasStatus :Active .
+
+# Edge server interfaces
+nt:Edge1_IF1 a :EthernetInterface ;
+    :interfaceName "edge-eth0" ;
+    :ipAddress "10.10.0.11" ;
+    :interfaceOf nt:EdgeServer1 ;
+    :hasStatus :Active .
+
+nt:Edge2_IF1 a :EthernetInterface ;
+    :interfaceName "edge-eth0" ;
+    :ipAddress "10.10.0.12" ;
+    :interfaceOf nt:EdgeServer2 ;
+    :hasStatus :Active .
+
+# ---- Network Links (redundant transport & service links) ----
+nt:Link1 a :NetworkLink ;
+    :connectsInterface nt:Router1_Interface1, nt:Switch1_Interface1 ;
+    :hasBandwidth "1000" ;
+    :hasStatus :Active .
+
+nt:Link2 a :NetworkLink ;
+    :connectsInterface nt:Router1_Interface2, nt:Switch1_Interface2 ;
+    :hasBandwidth "1000" ;
+    :hasStatus :Active .
+
+nt:Link3 a :NetworkLink ;
+    :connectsInterface nt:Switch1_Interface1, nt:Server1_Interface1 ;
+    :hasBandwidth "1000" ;
+    :hasStatus :Active .
+
+nt:Link4 a :NetworkLink ;
+    :connectsInterface nt:Router1_Interface1, nt:Router2_Interface1 ;
+    :hasBandwidth "1000" ;
+    :hasStatus :Active .
+
+nt:Link5 a :NetworkLink ;
+    :connectsInterface nt:Switch1_Interface2, nt:Server2_Interface1 ;
+    :hasBandwidth "1000" ;
+    :hasStatus :Active .
+
+nt:Link6 a :NetworkLink ;
+    :connectsInterface nt:Switch1_Interface2, nt:Firewall1_Interface1 ;
+    :hasBandwidth "1000" ;
+    :hasStatus :Active .
+
+nt:Link7 a :NetworkLink ;
+    :connectsInterface nt:Switch1_Interface1, nt:AccessPoint1_Interface1 ;
+    :hasBandwidth "1000" ;
+    :hasStatus :Active .
+
+# Transport / 5G specific links
+# Redundant transport paths from gNodeB to core through Router2 and Router1
+nt:Link8 a :NetworkLink ;
+    :connectsInterface nt:gNodeB1_IF1, nt:Router2_Interface2 ;
+    :hasBandwidth "10000" ;
+    :hasStatus :Active .
+
+nt:Link9 a :NetworkLink ;
+    :connectsInterface nt:gNodeB1_IF1, nt:Router1_Interface3 ;
+    :hasBandwidth "10000" ;
+    :hasStatus :Active .
+
+# Core connectivity (Router1 <-> Core site router implied via Router1_Interface3)
+nt:Link10 a :NetworkLink ;
+    :connectsInterface nt:Router1_Interface3, nt:UPF1_IF1 ;
+    :hasBandwidth "10000" ;
+    :hasStatus :Active .
+
+# Edge connectivity (low-latency path to UPF and edge servers)
+nt:Link11 a :NetworkLink ;
+    :connectsInterface nt:Edge1_IF1, nt:UPF1_IF1 ;
+    :hasBandwidth "10000" ;
+    :hasStatus :Active .
+
+nt:Link12 a :NetworkLink ;
+    :connectsInterface nt:Edge2_IF1, nt:UPF1_IF1 ;
+    :hasBandwidth "10000" ;
+    :hasStatus :Active .
+
+# Additional links for service-plane redundancy
+nt:Link13 a :NetworkLink ;
+    :connectsInterface nt:Router2_Interface1, nt:Router2_Interface2 ;
+    :hasBandwidth "10000" ;
+    :hasStatus :Active .
+
+# ---- Device -> Interface and connectivity assertions ----
+nt:Router1 :hasInterface nt:Router1_Interface1, nt:Router1_Interface2, nt:Router1_Interface3 .
+nt:Router2 :hasInterface nt:Router2_Interface1, nt:Router2_Interface2 .
+nt:Switch1 :hasInterface nt:Switch1_Interface1, nt:Switch1_Interface2 .
+nt:Server1 :hasInterface nt:Server1_Interface1 .
+nt:Server2 :hasInterface nt:Server2_Interface1 .
+nt:Firewall1 :hasInterface nt:Firewall1_Interface1 .
+nt:AccessPoint1 :hasInterface nt:AccessPoint1_Interface1 .
+nt:gNodeB1 :hasInterface nt:gNodeB1_IF1 .
+nt:AMF1 :hasInterface nt:AMF1_IF1 .
+nt:SMF1 :hasInterface nt:SMF1_IF1 .
+nt:UPF1 :hasInterface nt:UPF1_IF1 .
+nt:EdgeServer1 :hasInterface nt:Edge1_IF1 .
+nt:EdgeServer2 :hasInterface nt:Edge2_IF1 .
+
+# high-level connectivity (devices/hosts)
+nt:Router1 :connectedTo nt:Router2, nt:Switch1 .
+nt:Router2 :connectedTo nt:Router1, nt:gNodeB1 .
+nt:Switch1 :connectedTo nt:Router1, nt:Server1, nt:Server2, nt:Firewall1, nt:AccessPoint1 .
+nt:Server1 :connectedTo nt:Switch1 .
+nt:Server2 :connectedTo nt:Switch1 .
+nt:Firewall1 :connectedTo nt:Switch1 .
+nt:AccessPoint1 :connectedTo nt:Switch1 .
+nt:gNodeB1 :connectedTo nt:Router2, nt:Router1 .
+nt:UPF1 :connectedTo nt:Router1, nt:EdgeServer1, nt:EdgeServer2 .
+nt:EdgeServer1 :connectedTo nt:UPF1 .
+nt:EdgeServer2 :connectedTo nt:UPF1 .
+nt:AMF1 :connectedTo nt:SMF1, nt:UPF1 .
+nt:SMF1 :connectedTo nt:AMF1, nt:UPF1 .
+
+# site membership
+nt:SiteA :contains nt:Router1, nt:Switch1, nt:Server1, nt:Server2, nt:Router2, nt:Firewall1, nt:AccessPoint1, nt:gNodeB1 .
+nt:CoreSite :contains nt:AMF1, nt:SMF1, nt:UPF1 .
+nt:EdgeSite :contains nt:EdgeServer1, nt:EdgeServer2 .

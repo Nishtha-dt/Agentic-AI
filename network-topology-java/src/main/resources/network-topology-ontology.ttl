@@ -64,6 +64,30 @@
     rdfs:subClassOf :NetworkDevice .
 
 # ================================================================
+# 5G TELECOM NETWORK DEVICE CLASSES
+# ================================================================
+
+:gNodeB a owl:Class ;
+    rdfs:label "gNodeB" ;
+    rdfs:comment "5G New Radio base station that provides radio coverage" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:CoreNetworkFunction a owl:Class ;
+    rdfs:label "Core Network Function" ;
+    rdfs:comment "5G Core network function (AMF, SMF, UPF, etc.)" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:EdgeServer a owl:Class ;
+    rdfs:label "Edge Server" ;
+    rdfs:comment "Multi-access Edge Computing (MEC) server for low-latency applications" ;
+    rdfs:subClassOf :NetworkDevice .
+
+:Server a owl:Class ;
+    rdfs:label "Server" ;
+    rdfs:comment "A computer server providing network services" ;
+    rdfs:subClassOf :NetworkDevice .
+
+# ================================================================
 # INTERFACE CLASSES
 # ================================================================
 
@@ -345,7 +369,19 @@
     rdfs:domain :NetworkInterface ;
     rdfs:range xsd:int .
 
+# Switch Properties
+:hasPortCount a owl:DatatypeProperty ;
+    rdfs:label "port count" ;
+    rdfs:comment "Number of ports on a network switch" ;
+    rdfs:domain :Switch ;
+    rdfs:range xsd:string .
+
 # Link Properties
+:hasBandwidth a owl:DatatypeProperty ;
+    rdfs:label "has bandwidth" ;
+    rdfs:comment "Bandwidth capacity of the link in Mbps" ;
+    rdfs:domain :NetworkLink ;
+    rdfs:range xsd:string .
 :bandwidth a owl:DatatypeProperty ;
     rdfs:label "bandwidth" ;
     rdfs:comment "Bandwidth capacity of the link in Mbps" ;
